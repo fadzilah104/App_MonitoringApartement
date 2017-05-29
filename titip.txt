@@ -1,0 +1,144 @@
+ // $bulanlalu = $this->Moap->get("select sum(stand) as stand_awal, last_update from histori_meter where YEAR(last_update) = YEAR(now()) and mid ='$mid' GROUP BY MONTH(last_update)");
+        // $jun = $bulanlalu[0]->stand_awal;
+        // $jul = $bulanlalu[1]->stand_awal;
+        // $aug = $bulanlalu[2]->stand_awal;
+        // $sep = $bulanlalu[3]->stand_awal;
+        // $okt = $bulanlalu[4]->stand_awal;
+        // $nov = $bulanlalu[5]->stand_awal;
+        // $des = $bulanlalu[6]->stand_awal;
+
+        //query tanggal
+        //jumy
+
+        //jully
+        //$july = 
+
+        //agustus
+        //$augus = 
+
+        //september
+        //$sept = 
+
+        //oktober
+        // $okto = 
+        // $oktober = $okto[0]->stand;
+
+        // //november
+        // $nove = 
+        // $november = $okto[0]->stand;
+
+        //desember
+        $dec = $this->Moap->get("select * from histori_meter where mid ='$mid' and last_update like '%12-%' ORDER BY iid desc limit 1");
+        $desember = $dec[0]->stand;
+
+        // $dece = $this->Moap->get("select stand, last_update from histori_meter where mid ='$mid' and last_update like '%12-31%'");
+        // $desember1 = $dece[0]->stand;
+        //query tambah stand awal + akhir
+        //juli
+        $data['juli'] = $this->Moap->get("select * from histori_meter where mid ='$mid' and last_update like '%07-%' ORDER BY last_update desc limit 1");
+
+        //agustus
+        $data['agustus'] = $this->Moap->get("select * from histori_meter where mid ='$mid' and last_update like '%08-%' ORDER BY last_update desc limit 1");
+
+        //september
+        $data['september'] = $this->Moap->get("select * from histori_meter where mid ='$mid' and last_update like '%09-%' ORDER BY last_update desc limit 1");
+
+        //oktober
+        $data['oktober'] = $this->Moap->get("select * from histori_meter where mid ='$mid' and last_update like '%10-%' ORDER BY last_update desc limit 1");
+
+        
+
+        //november
+        $data['november'] = $this->Moap->get("select * from histori_meter where mid ='$mid' and last_update like '%11-%' ORDER BY last_update desc limit 1");
+        //desember
+        $data['desember'] = $jun + $jul + $aug + $sep + $okt + $nov + $desember;
+
+        $data['akhir'] = $jun + $jul + $aug + $sep + $okt + $nov + $des;
+
+        //Pemakaian 
+        //juli
+        $query1 = $this->Moap->get("select sum(stand) as stand_awal, last_update from histori_meter where YEAR(last_update) = YEAR(now()) and mid ='$mid' GROUP BY MONTH(last_update)");
+        $lastjuni = $query1[0]->stand_awal;
+        $lastjuli = $jun + $juli;
+        $data['cek1'] = $lastjuli - $lastjuni;
+
+        //agustus
+        $lastagustus = $jun + $jul + $augustus;
+        $data['cek2'] = $lastagustus - $lastjuli;
+        $tot2 = $lastagustus - $lastjuli;
+
+        //september
+        $lastseptember = $jun + $jul + $aug + $september;
+        $data['cek3'] = $lastseptember - $lastagustus;
+        $tot3 = $lastseptember - $lastagustus;
+
+        //oktober
+        $lastoktober = $jun + $jul + $aug + $sep + $oktober;
+        $data['cek4'] = $lastoktober - $lastseptember;
+        $tot4 = $lastoktober - $lastseptember;
+
+        //november
+        $lastnovember = $jun + $jul + $aug + $sep + $okt + $november;
+        $data['cek5'] = $lastnovember - $lastoktober;
+        $tot5 = $lastnovember - $lastoktober;
+
+        //desember
+        $lastdesember = $jun + $jul + $aug + $sep + $okt + $nov + $desember;
+        $data['cek6'] = $lastdesember - $lastnovember;
+        $tot6 = $lastdesember - $lastnovember;
+
+        //saatini
+        $saatini = $jun + $jul + $aug + $sep + $okt + $nov + $des;
+        $data['cek7'] = $saatini - $lastdesember;
+        $tot7 = $saatini - $lastdesember;
+
+        $rata1 = $tot2 + $tot3 + $tot4 + $tot5 + $tot6 + $tot7;
+        $data['rata2'] = $rata1 / 6;
+
+        $bulanini = $this->Moap->get("select SUM(stand) AS stand, last_update from histori_meter where MONTH(last_update) = MONTH(now()) and mid ='$mid'");
+        $data['bulanini'] = $bulanini[0]->stand;
+        $bulanskrg = $this->Moap->get("select SUM(stand) AS stand, last_update from histori_meter where MONTH(last_update) = MONTH(now()) and mid ='$mid'");
+        $data['bulanskrg'] = $bulanskrg[0]->stand;
+        // $data['tglini'] = $bulanini[0]->last_update;
+        // $hasil = $coba + $coba2;
+
+
+        $data['data'] = $this->Moap->get("select sum(stand) as stand_awal, last_update from histori_meter where YEAR(last_update) = YEAR(now()) and mid ='$mid' GROUP BY MONTH(last_update) limit 7 offset 1");
+        $tglcredit = $this->Moap->get("select Max(iid), credit, stand, voltage, current, last_update as tanggal_update from histori_meter where mid ='$mid' ORDER BY last_update desc");
+        print_r($tglcredit);
+        $data['lastdate'] = $this->Moap->get("select last_update from histori_meter where YEAR(last_update) = YEAR(now()) and mid ='$mid' GROUP BY MONTH(last_update) limit 6");
+
+        $last = $this->Moap->get("select last_update from histori_meter where mid ='$mid' ORDER BY last_update desc");
+        $data['lastnow'] = $last[0]->last_update;
+
+
+        // echo "</br>";
+        // foreach ($data as $c) {
+        // 	$stand = $c->stand_awal;
+        // }
+        // $bulanini = $this->Moap->get("select SUM(stand) AS stand, last_update from histori_meter where MONTH(last_update) = MONTH(now()) and mid ='$mid'");
+        // $coba = $bulanini[0]->stand;
+        // $hasil['data'] = $coba + $stand;
+        // $sql = $this->Moap->get("select sum(stand) as stand_awal, last_update from histori_meter where YEAR(last_update) = YEAR(now()) and mid ='$mid' GROUP BY MONTH(last_update)") + $hasil;
+        // print_r($sql);
+        // echo "Hasil bulan ini : $hasil";
+        //$stand = $data
+
+        $data['token'] = $this->Moap->get("select * from trx_token where meterid = '$mid'");
+        $data['monitor'] = $this->Moap->get("select credit,stand,voltage,current, last_update FROM histori_meter WHERE MONTH(last_update) = MONTH(now()) AND mid='$mid' ORDER by last_update desc");
+        $data['credit'] = $this->Moap->get("select credit, last_update FROM histori_meter WHERE mid='$mid' and Month(last_update) = Month(now()) group by last_update");
+        $data['energy'] = $this->Moap->get("select stand, last_update FROM histori_meter WHERE mid='$mid' and Month(last_update) = Month(now()) group by last_update");
+        $data['voltage'] = $this->Moap->get("select voltage, last_update FROM histori_meter WHERE mid='$mid' and Month(last_update) = Month(now()) group by last_update");
+        $data['current'] = $this->Moap->get("select current, last_update FROM histori_meter WHERE mid='$mid' and Month(last_update) = Month(now()) group by last_update");
+
+        $anggota = $this->Moap->get("select m.mid as id, k.no_kamar, k.mid, m.credit, p.ktp, b.nama, me.tanggal_integrasi FROM master_kamar k, monitor_meter m, pelanggan p, bio_penghuni b,master_meter me WHERE m.mid='$mid' and m.mid = k.id_kamar and p.id_kamar = k.id_kamar and b.ktp = p.ktp and me.mid = k.mid");
+
+        // print_r($anggota);
+        foreach ($anggota as $row) {
+            $data['nokamar'] = $row->no_kamar;
+            $data['mid'] = $row->mid;
+            $data['namap'] = $row->nama;
+            $data['tanggal_integrasi'] = $row->tanggal_integrasi;
+        }
+
+        $this->load->view('detail', $data);

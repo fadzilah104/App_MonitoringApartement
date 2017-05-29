@@ -1,0 +1,11 @@
+v0.0
+Basic HMVC
+
+v0.1
+move modules outside application and call another modules in controllers and views
+
+v0.2
+remap function is added
+
+v0.3
+home modules is repaired
